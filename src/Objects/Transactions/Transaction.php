@@ -85,7 +85,7 @@ abstract class Transaction
         return $this->data ?? null;
     }
 
-    public function setNotes($notes): self
+    public function setNote($notes): self
     {
         $this->notes = $notes;
         return $this;

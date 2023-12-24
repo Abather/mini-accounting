@@ -43,7 +43,7 @@ return [
 This package links two entities: **Accountable** (a model with an account) and **Referencable** (a document triggering
 account deposits or withdrawals).
 
-#### Accountable:
+#### Accountable
 
 To make a model accountable, use the `HasAccountMovement` trait:
 
@@ -99,7 +99,7 @@ $system->balanceAtEndOfYear()
 
 as end of month balance you can specify the year `balanceAtEndOfYear(1990)`
 
-#### Referencable:
+#### Referencable
 
 Make any model referencable by using the `Referencable` trait and implementing the `Referencable` interface:
 
@@ -174,10 +174,21 @@ public function defaultTransactions(): array
 }
 ```
 
-For each object (either `Deposit` or `Withdraw`), set the affected account and the calculation method used to determine
-the transaction amount.
+For each object (either `Deposit` or `Withdraw`), set the affected account and the calculation method used to determine the transaction amount.
 
-##### Account:
+- you can have *meta-Data* with the transactions using :
+
+```php
+$transaction->data = [
+    'foo' => 'bar'
+];
+
+$transaction->data // ['foo' => 'bar']
+  ```
+
+- also you can add note to the transaction via ```->setNote("note")```
+
+##### Account
 
 Refer to the desired account in three ways: direct relationship from the current model, using a foreign key from the
 current model, or giving it any ID for reference:
@@ -189,8 +200,8 @@ Account::make(\App\Models\Market::class)->relationship("market");
 In this example, specify the model in the `make` method; during calculation, the account will be the market linked with
 the current entity (`$bill->market`). Other settings include:
 
--   `variable('market_id')`: Provide any key from your model referring to the entity (`$bill->market_id`).
--   `static(3)`: Lock the record with the ID `3`. Also, pass a second parameter to the `make()` method to specify the
+- `variable('market_id')`: Provide any key from your model referring to the entity (`$bill->market_id`).
+- `static(3)`: Lock the record with the ID `3`. Also, pass a second parameter to the `make()` method to specify the
     entity being referred to:
 
 ```php
@@ -199,21 +210,21 @@ Account::make(\App\Models\Market::class, $this->market)
 
 In this way, you do not need to provide any other functions.
 
-##### Calculation:
+##### Calculation
 
 For calculation, use the following objects:
 
--   `Abather\MiniAccounting\Objects\Calculations\Equal`
--   `Abather\MiniAccounting\Objects\Calculations\Subtraction`
--   `Abather\MiniAccounting\Objects\Calculations\Addition`
--   `Abather\MiniAccounting\Objects\Calculations\Percentage`
+- `Abather\MiniAccounting\Objects\Calculations\Equal`
+- `Abather\MiniAccounting\Objects\Calculations\Subtraction`
+- `Abather\MiniAccounting\Objects\Calculations\Addition`
+- `Abather\MiniAccounting\Objects\Calculations\Percentage`
 
 For each object, provide `make($resource, $attribute)`. In our previous example, `make($this, "amount")` means
 the calculation will be on `$bill->amount`. Except for `Equal`, you must also define `factor`, which is the other side
 of each equation. `Factor` can be either dynamic or a static value:
 
--   `StaticFactor::make(10)`: The other side of the equation is 10 (e.g., `$bill->amount - 10`).
--   `DynamicFactor::make($this, 'percentage')`: The other side of the equation is `$bill->percentage`.
+- `StaticFactor::make(10)`: The other side of the equation is 10 (e.g., `$bill->amount - 10`).
+- `DynamicFactor::make($this, 'percentage')`: The other side of the equation is `$bill->percentage`.
 
 After defining `defaultTransactions()`, use it by calling `executeDefaultTransactions()`. You are free to define as
 many `transactions` methods as needed. Keep in mind that the name of each method should end with `Transactions`, and you
@@ -225,7 +236,7 @@ If you ever use `__call($method, $parameters)` in
 
 your `Accountable` or `Referencable` models, please add the following lines:
 
--   Accountable:
+- Accountable:
 
 ```php
 public function __call($method, $parameters)
@@ -239,7 +250,7 @@ public function __call($method, $parameters)
 }
 ```
 
--   Referencable:
+- Referencable:
 
 ```php
 public function __call($method, $parameters)
@@ -279,9 +290,9 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 ## Credits
 
--   [Abather](https://github.com/Abather)
--   [JoDeveloper](https://github.com/JoDeveloper)
--   [All Contributors](../../contributors)
+- [Abather](https://github.com/Abather)
+- [JoDeveloper](https://github.com/JoDeveloper)
+- [All Contributors](../../contributors)
 
 ## License
 

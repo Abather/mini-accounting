@@ -37,7 +37,7 @@ class Bill extends Model implements Referencable
                 ->setAccount(Account::make(\Workbench\App\Models\User::class)
                     ->relationship("user"))
                 ->setCalculation(Equal::make($this, "amount"))
-                ->setNotes("your notes should be written here"),
+                ->setNote("your notes should be written here"),
 
             Deposit::make($this, "deposit to system")
                 ->setAccount(Account::make(\Workbench\App\Models\System::class, System::first()))
